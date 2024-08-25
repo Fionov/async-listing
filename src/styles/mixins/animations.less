@@ -1,0 +1,23 @@
+.animation-pulse(@prop: opacity, @from: 1, @to: 0.3, @duration: 2s) {
+    @keyframes pulse {
+        0%, 100% {
+                @{prop}: @from;
+        }
+        50% {
+                @{prop}: @to;
+        }
+    }
+
+    animation: pulse @duration cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.rotation() {
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

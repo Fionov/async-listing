@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+@import "reset-css/less/reset";
+@import "variables";
+@import "mixins/grids";
+@import "mixins/breakpoints";
+@import "mixins/typography";
+
+html, body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: @bg-color-primary;
+    font-family: @font-family-base;
+    font-size: @text-base;
+}
+
+a {
+    color: @text-dark-gray;
+    text-decoration: none;
+
+    &:hover {
+        color: @text-blue;
+    }
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.lines-clamp-2 {
+    .line-clamp(2);
+}
+
+.lines-clamp-1 {
+    .line-clamp(1);
+}
