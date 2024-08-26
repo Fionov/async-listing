@@ -16,37 +16,6 @@ export class CoffeeApiService
     private static MAX_ATTEMPTS_COUNT = 10;
 
     /**
-     * Load Coffee Item, retry if failed
-     */
-    public static async getProduct(options: CoffeeApiOptions | null = {}): Promise<Coffee> | null
-    {
-        options = {
-            ...{retryTimeout: this.RETRY_TIMEOUT, maxAttemptsCount: this.MAX_ATTEMPTS_COUNT},
-            ...options
-        };
-
-        let retries = 0;
-        let result = null;
-
-        while (!result && retries++ < options.maxAttemptsCount) {
-            result = await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    this.fetchItem()
-                        .then((res) => {
-                            resolve(res);
-                        })
-                        .catch(reject);
-                }, retries === 1 ? 0 : options.retryTimeout);
-            });
-        }
-        if (!result) {
-            throw new Error('Unable to fetch data Coffee model');
-        }
-
-        return result;
-    }
-
-    /**
      * Get random image by Coffee Item
      */
     public static getImageUrlByCoffee(coffee: Coffee): string
@@ -78,7 +47,7 @@ export class CoffeeApiService
 
         CoffeeApiService.getProduct()
             .then((res) => {
-                this.checkDuplicates(collectionStore, res.id);
+                this.clearDuplicates(collectionStore, res.id);
                 Object.assign(coffee, res);
                 collectionStore.update((list) => [...list]);
             })
@@ -87,20 +56,51 @@ export class CoffeeApiService
                 collectionStore.update((list) => [...list]);
             })
             .finally(() => {
-                isLoading.set(false);
+                loadingStatusStore.set(false);
             });
     }
 
     /**
      * Validate collection to avoid ID duplications
      */
-    public static checkDuplicates(
+    public static clearDuplicates(
         collectionStore: Writable<Coffee[]>,
         coffeeId: number
     ): void {
         if (coffeeId) {
             collectionStore.update((list) => [...list.filter(coffee => coffee.id !== coffeeId)]);
         }
+    }
+
+    /**
+     * Load Coffee Item, retry if failed
+     */
+    public static async getProduct(options: CoffeeApiOptions | null = {}): Promise<Coffee> | null
+    {
+        options = {
+            ...{retryTimeout: this.RETRY_TIMEOUT, maxAttemptsCount: this.MAX_ATTEMPTS_COUNT},
+            ...options
+        };
+
+        let retries = 0;
+        let result = null;
+
+        while (!result && retries++ < options.maxAttemptsCount) {
+            result = await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    this.fetchItem()
+                        .then((res) => {
+                            resolve(res);
+                        })
+                        .catch(reject);
+                }, retries === 1 ? 0 : options.retryTimeout);
+            });
+        }
+        if (!result) {
+            throw new Error('Unable to fetch data Coffee model');
+        }
+
+        return result;
     }
 
     /**

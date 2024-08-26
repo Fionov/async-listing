@@ -102,10 +102,10 @@
 
         .listing {
             .grid(1);
-            padding: 20px;
 
             .min-width(@screen-small, {
                 .grid(2);
+                padding: 20px;
             });
 
             .min-width(@screen-medium, {
