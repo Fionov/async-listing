@@ -7,7 +7,7 @@
     import Spinner from "src/components/Spinner.svelte";
     import { coffeeList, isLoading } from "src/stores/CoffeeStore";
 
-    const AUTO_ADD_TIMEOUT = 5000;
+    const AUTO_ADD_TIMEOUT = 30000;
     const MAX_AUTO_LOADED_ITEMS = 100;
 
     let timer: NodeJS.Timeout | null;
